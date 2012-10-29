@@ -2,7 +2,7 @@
 
 ## Demo
 
-http://mauricesvay.github.com/cheaterpress/
+http://mauricesvay.github.com/CheaterPress/
 
 ## Author
 
