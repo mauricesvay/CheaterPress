@@ -4,13 +4,20 @@
 
 http://mauricesvay.github.com/CheaterPress/
 
+## About
+
+HTML5 app that helps you cheat at LetterPress. 
+
+- take a screenshot of the game's grid
+- load it into the app
+- get word suggestions that match the letters
+
+Everything runs in the browser. Tested with modern ones (inc. iOS6 Safari).
+
+
 ## Author
 
 * Maurice Svay <maurice@svay.com>, [http://svay.com](http://svay.com)
-
-## About
-
-HTML5 app that helps you cheat at LetterPress
 
 ## Simplified BSD License
 
