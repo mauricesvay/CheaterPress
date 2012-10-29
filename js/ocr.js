@@ -31,7 +31,6 @@ var OCR = {
                 h = 640;
                 break;
         }
-        console.log(ratio);
 
         var canvas = document.createElement('canvas');
         canvas.width = 640;
@@ -62,7 +61,6 @@ var OCR = {
                 sourceCanvas.width = inc;
                 sourceCanvas.height = inc;
                 sourceCanvas.getContext('2d').drawImage(canvas, j, i, inc, inc, 0, 0, inc, inc);
-
                 // Autocrop white margins
                 bounds = OCR.autocrop(sourceCanvas);
                 // console.log(bounds);
@@ -156,7 +154,7 @@ var OCR = {
 
         //crop bottom
         bottomScan:
-        for (y=canvas.height; y>1; --y) {
+        for (y = (canvas.height - 1); y>1; --y) {
             for (x=0; x<canvas.width; x++) {
                 idx = (x + y * canvas.width) * 4;
                 v = OCR.rgb2value(pixels.data[idx], pixels.data[idx+1], pixels.data[idx+2]);
@@ -182,7 +180,7 @@ var OCR = {
 
         //crop right
         rightScan:
-        for (x=canvas.width; x>1; --x) {
+        for (x = (canvas.width - 1); x>1; --x) {
             for (y=0; y<canvas.height; y++) {
                 idx = (x + y * canvas.width) * 4;
                 v = OCR.rgb2value(pixels.data[idx], pixels.data[idx+1], pixels.data[idx+2]);
