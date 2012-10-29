@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>CheaterPress</title>
+    <link rel="stylesheet" type="text/css" href="css/museosans_500_macroman/stylesheet.css">
+    <link rel="stylesheet" type="text/css" href="css/screen.css">
+    <style type="text/css">canvas{border:1px solid red}</style>
+</head>
+<body>
+<div>
+    <h1>
+        CheaterPress
+    </h1>
+    <p>
+        Take a screenshot of LetterPress and upload it below<br>
+        <small>(standard color scheme, portrait only)</small>
+    </p>
+    <input type="file" id="imagepicker" name="imagepicker"/>
+</div>
+<div id="results">
+    <p class="info"></p>
+    <ul>
+    </ul>
+</div>
+
+<script src="js/words.js"></script>
+<script src="js/search.js"></script>
+
+<script src="js/ocr-training.js"></script>
+<script src="js/ocr.js"></script>
+<script type="text/javascript">
+window.onload = function() {
+    var input = document.getElementById('imagepicker');
+    input.addEventListener('change', handleFiles);
+}
+
+function handleFiles(e) {
+    if (window.File && window.FileReader && window.FileList && window.Blob) {
+        var reader = new FileReader;
+        reader.onload = function(event) {
+            var img = new Image;
+            img.onload = function() {
+                var letters = OCR.recognize(this);
+                var results = Search.getResults(letters.join(''));
+
+                var out = '';
+                for (var i = 0, l = results.length; i<l; i++) {
+                    out += '<li>' + results[i] + '</li>';
+                }
+                document.getElementsByTagName('ul')[0].innerHTML = out;
+                document.getElementsByClassName('info')[0].innerHTML = letters.join(" ") +  " : " + results.length + " words";
+            };
+            img.src = event.target.result;
+        };
+        reader.readAsDataURL(e.target.files[0]);
+    } else {
+        alert("Sorry, your browser isn't supported");
+    }
+}
+</script>
+</body>
+</html>

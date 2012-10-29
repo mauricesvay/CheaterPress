@@ -1,0 +1,30 @@
+body {
+    background: #f0efec;
+    font-family: "museo_sans_500regular", Arial, sans-serif;
+    width: 30em;
+    line-height: 1.5;
+    margin: 1em auto;
+    color: #222;
+}
+h1 {
+    margin: 0;
+}
+ul,
+li {
+    margin: 0;
+    padding: 0;
+}
+p {
+    font-weight: bold;
+}
+small {
+    font-weight: normal;
+}
+ul {
+    border-top: 1px solid #CCC;
+}
+li {
+    list-style: none;
+    padding: .5em 0;
+    border-bottom: 1px solid #CCC;
+}
