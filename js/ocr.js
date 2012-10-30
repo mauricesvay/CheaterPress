@@ -37,18 +37,18 @@ var OCR = {
         canvas.height = 640;
         var ctx = canvas.getContext('2d');
         ctx.drawImage(image, x, y, w, h, 0, 0, 640, 640);
-        // document.body.appendChild(canvas);
 
         //Convert to grayscale
         var pixels = ctx.getImageData(0,0,640,640);
         ctx.putImageData(OCR.grayscale(pixels), 0, 0);
 
         var inc = Math.round(canvas.width / 5); // 5x5 grid
-        var letterCanvas;
+        var sourceCanvas, sourceCtx;
+        var letterCanvas, letterCtx;
         var bounds;
         var best_letter = 0;
-        var max_distance = 1000;
-        var hist;
+        var max_distance = Infinity;
+        var hash;
 
         for (var i = 0; i < canvas.width; i+=inc) {
             for (var j = 0; j < canvas.height; j+=inc) {
@@ -60,29 +60,31 @@ var OCR = {
                 sourceCanvas = document.createElement('canvas');
                 sourceCanvas.width = inc;
                 sourceCanvas.height = inc;
-                sourceCanvas.getContext('2d').drawImage(canvas, j, i, inc, inc, 0, 0, inc, inc);
+                sourceCtx = sourceCanvas.getContext('2d');
+                sourceCtx.drawImage(canvas, j, i, inc, inc, 0, 0, inc, inc);
                 // Autocrop white margins
                 bounds = OCR.autocrop(sourceCanvas);
-                // console.log(bounds);
 
                 // Downscale to 16x16
                 letterCanvas = document.createElement('canvas');
                 letterCanvas.width = 16;
                 letterCanvas.height = 16;
                 largestDimension = Math.max((bounds.bottom-bounds.top), (bounds.right-bounds.left));
-                letterCanvas.getContext('2d').drawImage(
+                letterCtx = letterCanvas.getContext('2d');
+                letterCtx.fillStyle = "#FFFFFF";
+                letterCtx.fillRect(0,0,16,16);
+                letterCtx.drawImage(
                     sourceCanvas,
                     bounds.left, bounds.top,
                     bounds.right-bounds.left,bounds.bottom-bounds.top,
                     0, 0,
                     16, 16
                 );
-                // document.body.appendChild(letterCanvas);
 
-                // Search closest match by "histogram"
-                hist = OCR.histogram(letterCanvas);
+                // Search closest match by hash
+                hash = OCR.hash(letterCanvas);
                 for (var letter in training) {
-                    distance = OCR.histogram_distance(hist, training[letter]);
+                    distance = OCR.distance(hash, training[letter]);
                     if (distance < max_distance) {
                         max_distance = distance;
                         best_letter = letter;
@@ -154,7 +156,7 @@ var OCR = {
 
         //crop bottom
         bottomScan:
-        for (y = (canvas.height - 1); y>1; --y) {
+        for (y = (canvas.height - 1); y > 0; y--) {
             for (x=0; x<canvas.width; x++) {
                 idx = (x + y * canvas.width) * 4;
                 v = OCR.rgb2value(pixels.data[idx], pixels.data[idx+1], pixels.data[idx+2]);
@@ -180,7 +182,7 @@ var OCR = {
 
         //crop right
         rightScan:
-        for (x = (canvas.width - 1); x>1; --x) {
+        for (x = (canvas.width - 1); x > 0; x--) {
             for (y=0; y<canvas.height; y++) {
                 idx = (x + y * canvas.width) * 4;
                 v = OCR.rgb2value(pixels.data[idx], pixels.data[idx+1], pixels.data[idx+2]);
@@ -194,9 +196,10 @@ var OCR = {
     },
 
     /**
-     * Generate "histogram" values
+     * Generate image hash
+     * Simply count dark pixels per column
      */
-    histogram : function(canvas) {
+    hash : function(canvas) {
         var threshold = 128;
         var ctx = canvas.getContext('2d');
         var pixels = ctx.getImageData(0,0,canvas.width,canvas.height);
@@ -216,17 +219,17 @@ var OCR = {
     },
 
     /**
-     * Compute distance between 2 histograms
+     * Compute euclidean distance between 2 hashes
      */
-    histogram_distance : function(h1, h2) {
+    distance : function(h1, h2) {
         if (h1.length != h2.length) {
             return;
         }
         var diff = 0;
         for (var i = 0; i < h1.length; i++) {
-            diff += Math.abs(h1[i] - h2[i]);
+            diff += Math.pow((h1[i] - h2[i]), 2);
         }
-        return diff;
+        return Math.sqrt(diff);
     }
 };
 

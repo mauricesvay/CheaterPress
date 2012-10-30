@@ -41,6 +41,7 @@ function handleFiles(e) {
         reader.onload = function(event) {
             var img = new Image;
             img.onload = function() {
+
                 var letters = OCR.recognize(this);
                 var results = Search.getResults(letters.join(''));
 
@@ -51,6 +52,8 @@ function handleFiles(e) {
                 document.getElementsByTagName('ul')[0].innerHTML = out;
                 document.getElementsByClassName('info')[0].innerHTML = letters.join(" ") +  " : " + results.length + " words";
             };
+            document.getElementsByClassName('info')[0].innerHTML = "";
+            document.getElementsByTagName('ul')[0].innerHTML = '<li>Loading...</li>';
             img.src = event.target.result;
         };
         reader.readAsDataURL(e.target.files[0]);
