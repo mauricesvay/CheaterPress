@@ -1,11 +1,18 @@
 body {
     background: #f0efec;
     font-family: "museo_sans_500regular", Arial, sans-serif;
-    width: 30em;
     line-height: 1.5;
-    margin: 1em auto;
+    margin: 1em;
     color: #222;
 }
+
+@media only screen and (min-width: 800px) {
+    body {
+        max-width: 30em;
+        margin: 1em auto;
+    }
+}
+
 h1 {
     margin: 0;
 }
