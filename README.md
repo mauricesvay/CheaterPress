@@ -1,10 +1,13 @@
-# CheaterPress
+CheaterPress
+============
 
-## Demo
+Demo
+----
 
 http://mauricesvay.github.com/CheaterPress/
 
-## About
+How to use
+----------
 
 HTML5 app that helps you cheat at LetterPress. 
 
@@ -12,16 +15,22 @@ HTML5 app that helps you cheat at LetterPress.
 - load it into the app
 - get word suggestions that match the letters
 
+How it works
+------------
+
+Cheaterpress uses File API to load screenshots and performs a very basic OCR to determine the letters being played. It then looks up into a dictionnary to find matching words.
+
 Everything runs in the browser. Tested with modern ones (inc. iOS6 Safari).
 
-
-## Author
+Author
+------
 
 * Maurice Svay <maurice@svay.com>, [http://svay.com](http://svay.com)
 
-## Simplified BSD License
+Simplified BSD License
+----------------------
 
-    Copyright 2011 Maurice Svay. All rights reserved.
+    Copyright 2012 Maurice Svay. All rights reserved.
 
     Redistribution and use in source and binary forms, with or without modification, are
     permitted provided that the following conditions are met:
